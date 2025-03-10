@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.example.model.User;
+import org.example.model.UserDTO;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,10 +34,10 @@ public interface UserInterface {
     @Operation(summary = "Добавить пользователя")
     @ApiResponse(responseCode = "200", description = "Пользователь добавлен")
     @PutMapping()
-    ResponseEntity<User> addUser(@RequestBody User user);
+    ResponseEntity<User> addUser(@RequestBody UserDTO user);
 
     @Operation(summary = "Обновить пользователя")
     @ApiResponse(responseCode = "200", description = "Пользователь обновлен")
     @PatchMapping("/{id}")
-    void updateUser(@RequestBody User user, @PathVariable("id") int id);
+    void updateUser(@RequestBody UserDTO user, @PathVariable("id") long id);
 }
