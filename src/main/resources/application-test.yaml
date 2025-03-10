@@ -1,7 +1,4 @@
-server:
-  port:
-    4567
 spring:
-  application:
-    name:
-      Voting-Room
+  jpa:
+    hibernate:
+      ddl-auto: create-drop

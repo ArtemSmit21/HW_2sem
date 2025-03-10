@@ -4,6 +4,7 @@ import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import lombok.AllArgsConstructor;
 import org.example.interfaces.UserInterface;
 import org.example.model.User;
+import org.example.model.UserDTO;
 import org.example.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,7 +31,7 @@ public class UserController implements UserInterface {
   public ResponseEntity<List<User>> getUsers() throws ExecutionException, InterruptedException {
     return ResponseEntity
         .status(HttpStatus.OK)
-        .body(userService.getUsers().get());
+        .body(userService.getUsers());
   }
 
   @Override
@@ -39,14 +40,14 @@ public class UserController implements UserInterface {
   }
 
   @Override
-  public ResponseEntity<User> addUser(User user) {
+  public ResponseEntity<User> addUser(UserDTO user) {
     return ResponseEntity
             .status(HttpStatus.OK)
             .body(userService.addUser(user));
   }
 
   @Override
-  public void updateUser(User user, int id) {
-    userService.updateUser(user, id);
+  public void updateUser(UserDTO userDTO, long id) {
+    userService.updateUser(userDTO, id);
   }
 }
