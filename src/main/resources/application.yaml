@@ -11,6 +11,7 @@ server:
     threads:
       max: 200
       min-spare: 10
+  port: 8082
 
 resilience4j.ratelimiter:
     instances:
@@ -40,4 +41,8 @@ spring:
         format_sql: true
     hibernate:
       ddl-auto: validate
+  kafka:
+    bootstrap-servers: localhost:29093
+
+topic-to-send-message: audit_topic
 
