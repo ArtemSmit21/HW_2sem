@@ -1,5 +1,6 @@
 package org.example.interfaces;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -29,15 +30,15 @@ public interface UserInterface {
     @Operation(summary = "Удалить пользователя")
     @ApiResponse(responseCode = "200", description = "Пользователь удален")
     @DeleteMapping("/{id}")
-    void deleteUser(@PathVariable("id") int id);
+    void deleteUser(@PathVariable("id") int id) throws JsonProcessingException;
 
     @Operation(summary = "Добавить пользователя")
     @ApiResponse(responseCode = "200", description = "Пользователь добавлен")
     @PutMapping()
-    ResponseEntity<User> addUser(@RequestBody UserDTO user);
+    ResponseEntity<User> addUser(@RequestBody UserDTO user) throws JsonProcessingException;
 
     @Operation(summary = "Обновить пользователя")
     @ApiResponse(responseCode = "200", description = "Пользователь обновлен")
     @PatchMapping("/{id}")
-    void updateUser(@RequestBody UserDTO user, @PathVariable("id") long id);
+    void updateUser(@RequestBody UserDTO user, @PathVariable("id") long id) throws JsonProcessingException;
 }
