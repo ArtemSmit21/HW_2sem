@@ -53,9 +53,10 @@ public class KafkaProducerServiceTest {
   @Test
   @DisplayName("This test check send method")
   void test1() {
-    String testDtoMessage = new String("abcd");
 
-    assertDoesNotThrow(() -> kafkaProducerService.sendMessage(testDtoMessage));
+    UserAction userAction = new UserAction(1, Instant.now(), "Insert", "none");
+
+    assertDoesNotThrow(() -> kafkaProducerService.sendUserActionMessage(userAction);
 
     KafkaTestConsumer consumer = new KafkaTestConsumer(KAFKA.getBootstrapServers(), "some-group-id");
     consumer.subscribe(List.of("audit_topic"));
@@ -70,7 +71,11 @@ public class KafkaProducerServiceTest {
         } catch (JsonProcessingException e) {
           throw new RuntimeException(e);
         }
-        assertEquals(testDtoMessage, message);
+        try {
+          assertEquals(objectMapper.writeValueAsString(userAction), message);
+        } catch (JsonProcessingException e) {
+          throw new RuntimeException(e);
+        }
       }
     );
   }
