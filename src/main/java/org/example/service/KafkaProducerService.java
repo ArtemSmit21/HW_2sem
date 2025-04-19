@@ -24,9 +24,7 @@ public class KafkaProducerService {
     this.topic = topic;
   }
 
-  public void sendUserActionMessage(UserAction userAction) throws JsonProcessingException {
-    String message = objectMapper.writeValueAsString(userAction);
-
-    CompletableFuture<SendResult<String, String>> sendResult = kafkaTemplate.send(topic, message);
+  public void sendMessage(String messageDto) {
+    CompletableFuture<SendResult<String, String>> sendResult = kafkaTemplate.send(topic, messageDto);
   }
 }

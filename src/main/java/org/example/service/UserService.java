@@ -57,7 +57,7 @@ public class UserService {
         "none"
       );
 
-    kafkaProducerService.sendUserActionMessage(userAction);
+    kafkaProducerService.sendMessage(objectMapper.writeValueAsString(userAction));
     return user.get();
   }
 
@@ -73,7 +73,7 @@ public class UserService {
         "none"
       );
 
-    kafkaProducerService.sendUserActionMessage(userAction);
+    kafkaProducerService.sendMessage(objectMapper.writeValueAsString(userAction));
     return tempUser;
   }
 
@@ -99,6 +99,6 @@ public class UserService {
         "none"
       );
 
-    kafkaProducerService.sendUserActionMessage(userAction);
+    kafkaProducerService.sendMessage(objectMapper.writeValueAsString(userAction));
   }
 }

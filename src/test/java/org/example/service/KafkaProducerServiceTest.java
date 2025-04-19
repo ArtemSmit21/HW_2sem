@@ -3,6 +3,7 @@ package org.example.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
+import org.example.model.UserAction;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,7 @@ import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import org.testcontainers.utility.DockerImageName;
 
+import java.time.Instant;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
@@ -51,12 +53,12 @@ public class KafkaProducerServiceTest {
   private ObjectMapper objectMapper;
 
   @Test
-  @DisplayName("This test check send method")
-  void test1() {
+  @DisplayName("This test check send method (with retrieving message from kafka)")
+  void shouldSendCustomMessage() {
 
-    UserAction userAction = new UserAction(1, Instant.now(), "Insert", "none");
+    String testDtoMessage = "abcd";
 
-    assertDoesNotThrow(() -> kafkaProducerService.sendUserActionMessage(userAction);
+    assertDoesNotThrow(() -> kafkaProducerService.sendMessage(objectMapper.writeValueAsString(testDtoMessage)));
 
     KafkaTestConsumer consumer = new KafkaTestConsumer(KAFKA.getBootstrapServers(), "some-group-id");
     consumer.subscribe(List.of("audit_topic"));
@@ -71,11 +73,7 @@ public class KafkaProducerServiceTest {
         } catch (JsonProcessingException e) {
           throw new RuntimeException(e);
         }
-        try {
-          assertEquals(objectMapper.writeValueAsString(userAction), message);
-        } catch (JsonProcessingException e) {
-          throw new RuntimeException(e);
-        }
+        assertEquals(testDtoMessage, message);
       }
     );
   }
