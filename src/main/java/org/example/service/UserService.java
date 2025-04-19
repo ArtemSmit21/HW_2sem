@@ -49,15 +49,15 @@ public class UserService {
       userRepository.delete(user.get());
     }
 
-    String jsonStr = objectMapper.writeValueAsString(
+    UserAction userAction =
       new UserAction(
         id,
         Instant.now(),
         "DELETE",
         "none"
-      )
-    );
-    kafkaProducerService.sendMessage(jsonStr);
+      );
+
+    kafkaProducerService.sendUserActionMessage(userAction);
     return user.get();
   }
 
@@ -65,15 +65,15 @@ public class UserService {
   public User addUser(UserDTO user) throws JsonProcessingException {
     User tempUser = userRepository.save(new User(user.getFirstName(), user.getLastName(), user.getEmail()));
 
-    String jsonStr = objectMapper.writeValueAsString(
+    UserAction userAction =
       new UserAction(
         tempUser.getId(),
         Instant.now(),
         "INSERT",
         "none"
-      )
-    );
-    kafkaProducerService.sendMessage(jsonStr);
+      );
+
+    kafkaProducerService.sendUserActionMessage(userAction);
     return tempUser;
   }
 
@@ -91,14 +91,14 @@ public class UserService {
     user.setEmail(userDTO.getEmail());
     userRepository.save(user);
 
-    String jsonStr = objectMapper.writeValueAsString(
+    UserAction userAction =
       new UserAction(
         id,
         Instant.now(),
         "UPDATE",
         "none"
-      )
-    );
-    kafkaProducerService.sendMessage(jsonStr);
+      );
+
+    kafkaProducerService.sendUserActionMessage(userAction);
   }
 }

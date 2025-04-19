@@ -2,6 +2,7 @@ package org.example.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.example.model.UserAction;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.support.SendResult;
@@ -23,8 +24,8 @@ public class KafkaProducerService {
     this.topic = topic;
   }
 
-  public void sendMessage(String dtoMessage) throws JsonProcessingException {
-    String message = objectMapper.writeValueAsString(dtoMessage);
+  public void sendUserActionMessage(UserAction userAction) throws JsonProcessingException {
+    String message = objectMapper.writeValueAsString(userAction);
 
     CompletableFuture<SendResult<String, String>> sendResult = kafkaTemplate.send(topic, message);
   }
