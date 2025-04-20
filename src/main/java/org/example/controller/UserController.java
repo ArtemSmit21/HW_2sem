@@ -1,10 +1,12 @@
 package org.example.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import lombok.AllArgsConstructor;
 import org.example.interfaces.UserInterface;
 import org.example.model.User;
 import org.example.model.UserDTO;
+import org.example.service.KafkaProducerService;
 import org.example.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,19 +37,19 @@ public class UserController implements UserInterface {
   }
 
   @Override
-  public void deleteUser(int id) {
+  public void deleteUser(int id) throws JsonProcessingException {
     userService.deleteUser(id);
   }
 
   @Override
-  public ResponseEntity<User> addUser(UserDTO user) {
+  public ResponseEntity<User> addUser(UserDTO user) throws JsonProcessingException {
     return ResponseEntity
             .status(HttpStatus.OK)
             .body(userService.addUser(user));
   }
 
   @Override
-  public void updateUser(UserDTO userDTO, long id) {
+  public void updateUser(UserDTO userDTO, long id) throws JsonProcessingException {
     userService.updateUser(userDTO, id);
   }
 }
