@@ -4,9 +4,11 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.AllArgsConstructor;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.example.exception.UserNotFoundException;
+import org.example.model.OutboxRecord;
 import org.example.model.User;
 import org.example.model.UserAction;
 import org.example.model.UserDTO;
+import org.example.repository.OutboxRepository;
 import org.example.repository.UserRepository;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
@@ -22,8 +24,8 @@ import java.util.Optional;
 public class UserService {
 
   private final UserRepository userRepository;
-  private final KafkaProducerService kafkaProducerService;
   private final ObjectMapper objectMapper;
+  private final OutboxRepository outboxRepository;
 
   @Cacheable(value = "get_user_cache", key = "#root.methodName")
   @Transactional(readOnly = true)
@@ -57,7 +59,11 @@ public class UserService {
         "none"
       );
 
-    kafkaProducerService.sendMessage(objectMapper.writeValueAsString(userAction));
+    outboxRepository.save(
+      OutboxRecord.builder()
+        .data(objectMapper.writeValueAsString(userAction))
+        .build()
+    );
     return user.get();
   }
 
@@ -73,7 +79,11 @@ public class UserService {
         "none"
       );
 
-    kafkaProducerService.sendMessage(objectMapper.writeValueAsString(userAction));
+    outboxRepository.save(
+      OutboxRecord.builder()
+        .data(objectMapper.writeValueAsString(userAction))
+        .build()
+    );
     return tempUser;
   }
 
@@ -99,6 +109,10 @@ public class UserService {
         "none"
       );
 
-    kafkaProducerService.sendMessage(objectMapper.writeValueAsString(userAction));
+    outboxRepository.save(
+      OutboxRecord.builder()
+        .data(objectMapper.writeValueAsString(userAction))
+        .build()
+    );
   }
 }
