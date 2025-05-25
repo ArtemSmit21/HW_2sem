@@ -2,16 +2,15 @@ management:
   endpoints:
     web:
       exposure:
-        include: "*"
-        exclude: shutdown
-      base-path: /admin/actuator
+        include: health,info,prometheus
+
+  prometheus:
+    metrics:
+      export:
+        enabled: true
 
 server:
-  tomcat:
-    threads:
-      max: 200
-      min-spare: 10
-  port: 8082
+  port: 8080
 
 resilience4j.ratelimiter:
     instances:
